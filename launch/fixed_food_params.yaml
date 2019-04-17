@@ -1,0 +1,15 @@
+wheel_radius: 5.0
+
+food_params:
+
+    position_list : [-100, 100]
+    width: 10.0 
+
+    led: 
+        pin: 3
+        on_value: 20
+        off_value: 0, 
+        on_duration: 1.0
+        refractory_duration: 1.0
+
+
