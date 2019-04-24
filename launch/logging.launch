@@ -1,0 +1,9 @@
+<launch>
+    <node 
+        pkg="rosbag" 
+        name="flywheel_logger" 
+        type="record" 
+        args="record  -o $(env HOME)/flywheel /flywheel_data /led_pwm_info /em3242_angle_sensor_data" 
+        >
+    </node>
+</launch>
