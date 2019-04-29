@@ -2,9 +2,9 @@ wheel_radius: 5.0
 
 food_sources:
 
-    position_list : [-100, 100]
+    position_list : [-5, 15]
 
-    width: 10.0 
+    width: 5.0 
 
     led: 
         pin: 3

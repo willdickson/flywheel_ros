@@ -1,0 +1,15 @@
+<launch>
+    <node 
+        pkg="rqt_image_view" 
+        name="rqt_image_view" 
+        type="rqt_image_view" 
+        > 
+    </node>
+    <node 
+        pkg="rqt_plot" 
+        type="rqt_plot" 
+        name="rqt_plot" 
+        args="/flywheel_data/position"
+        > 
+    </node>
+</launch>

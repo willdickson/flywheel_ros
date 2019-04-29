@@ -23,11 +23,12 @@ class FixedFoodSourcesNode(object):
         self.start_position = None 
 
         rospy.init_node('fixed_food_source')
+        self.flywheel_data_pub = rospy.Publisher('/flywheel_data', FlyWheelData, queue_size=10) 
+
         self.get_param()
         self.create_food_regions()
         self.start_time = rospy.Time.now().to_time()
         self.angle_data_queue = Queue.Queue() 
-        self.flywheel_data_pub = rospy.Publisher('/flywheel_data', FlyWheelData, queue_size=10) 
         self.angle_data_sub = rospy.Subscriber('/em3242_angle_sensor_data', EM3242_AngleSensorData, self.on_angle_data) 
 
     def get_param(self):

@@ -3,7 +3,7 @@
         pkg="rosbag" 
         name="flywheel_logger" 
         type="record" 
-        args="record  -o $(env HOME)/work/flywheel_config/flywheel /flywheel_data /led_pwm_info /em3242_angle_sensor_data" 
+        args="record  -o $(env HOME)/work/flywheel_config/flywheel /flywheel_data /led_pwm_info /em3242_angle_sensor_data /camera/image_raw /camera/camera_info" 
         >
     </node>
 </launch>

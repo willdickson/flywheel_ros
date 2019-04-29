@@ -1,0 +1,7 @@
+<launch>
+    <node pkg="camera1394" type="camera1394_node" name="camera1394"> 
+        <param name="video_mode" value="format7_mode0" />
+        <param name="auto_exposure" value="0" />
+        <param name="shutter" value="0" />
+    </node>
+</launch>

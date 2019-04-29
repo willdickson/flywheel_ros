@@ -4,5 +4,8 @@
     <rosparam command="load" file="$(arg config)" ns="flywheel"/>
     <node pkg="led_pwm_control_ros" name="led_pwm" type="led_pwm_node.py" > </node>
     <node pkg="em3242_angle_sensor_ros" name="em3242_angle_sensor" type="em3242_angle_sensor_node.py" > </node>
+    <include file="$(find flywheel_ros)/launch/camera1394.launch" />
     <node pkg="flywheel_ros" name="fixed_food_sources" type="fixed_food_sources.py" > </node> 
+    <include file="$(find flywheel_ros)/launch/visualization.launch" />
+
 </launch>
