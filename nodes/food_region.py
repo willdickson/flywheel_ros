@@ -18,9 +18,10 @@ class FoodRegion(object):
     def width(self):
         return self.param['width']
 
-    def update(self,t,fly_position):
+    def update(self,t,fly_position, led_enabled=True):
         contains_fly = self.contains(fly_position)
-        self.led_scheduler.update(t,contains_fly)
+        if led_enabled:
+            self.led_scheduler.update(t,contains_fly)
         if contains_fly:
             print('region {} contains fly, led = {}'.format(self.index, self.led_scheduler.led_on))
 

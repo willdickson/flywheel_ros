@@ -1,5 +1,10 @@
 wheel_radius: 5.0
 
+duration:
+    trial: 40.0
+    pre_trial: 10.0
+    post_trial: 10.0
+
 food_sources:
 
     position_list : [-5, 15]

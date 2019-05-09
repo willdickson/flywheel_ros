@@ -31,6 +31,18 @@ class FixedFoodSourcesNode(object):
         self.angle_data_queue = Queue.Queue() 
         self.angle_data_sub = rospy.Subscriber('/em3242_angle_sensor_data', EM3242_AngleSensorData, self.on_angle_data) 
 
+    @property
+    def pre_trial_end_time(self):
+        return self.param['duration']['pre_trial']
+
+    @property
+    def trial_end_time(self):
+        return self.pre_trial_end_time + self.param['duration']['trial']
+
+    @property
+    def post_trial_end_time(self):
+        return self.trial_end_time + self.param['duration']['post_trial']
+
     def get_param(self):
         self.param = rospy.get_param('/flywheel', None)
         if self.param is None:
@@ -73,26 +85,33 @@ class FixedFoodSourcesNode(object):
             ros_time_now = rospy.Time.now()
             current_time = ros_time_now.to_time()
             elapsed_time = current_time - self.start_time 
+            led_enabled = True
             for food_region in self.food_region_list:
-                food_region.update(elapsed_time,fly_position)
+                if elapsed_time < self.pre_trial_end_time:
+                    led_enabled = False 
+                elif elapsed_time > self.trial_end_time:
+                    led_enabled = False 
+                    if food_region.led_scheduler.led_on:
+                        food_region.led_scheduler.turn_off_led()
+                food_region.update(elapsed_time,fly_position,led_enabled=led_enabled)
 
             # Publish data for flywheel
-            flywheel_data = FlyWheelData()
-            flywheel_data.header.stamp = ros_time_now
-            flywheel_data.position = fly_position
-            flywheel_data.elapsed_time = elapsed_time
-            for food_region in self.food_region_list:
-                region_data = FoodRegionData()
-                region_data.location = food_region.position
-                region_data.width = food_region.width
-                region_data.contains = food_region.contains(fly_position)
-                region_data.led_data.on = food_region.led_scheduler.led_on
-                region_data.led_data.value = food_region.led_scheduler.value
-                region_data.led_data.pin = food_region.led_scheduler.pin
-                flywheel_data.region_data_array.append(region_data)
-            self.flywheel_data_pub.publish(flywheel_data)
-
-            print('t = {:1.2f}, pos = {:1.2f}'.format(elapsed_time, fly_position))
+            if elapsed_time < self.post_trial_end_time:
+                flywheel_data = FlyWheelData()
+                flywheel_data.header.stamp = ros_time_now
+                flywheel_data.position = fly_position
+                flywheel_data.elapsed_time = elapsed_time
+                for food_region in self.food_region_list:
+                    region_data = FoodRegionData()
+                    region_data.location = food_region.position
+                    region_data.width = food_region.width
+                    region_data.contains = food_region.contains(fly_position)
+                    region_data.led_data.on = food_region.led_scheduler.led_on
+                    region_data.led_data.value = food_region.led_scheduler.value
+                    region_data.led_data.pin = food_region.led_scheduler.pin
+                    flywheel_data.region_data_array.append(region_data)
+                self.flywheel_data_pub.publish(flywheel_data)
+                print('t = {:1.2f}, pos = {:1.2f}'.format(elapsed_time, fly_position))
 
 # ---------------------------------------------------------------------------------------
 if __name__ == '__main__':
